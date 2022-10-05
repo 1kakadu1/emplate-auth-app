@@ -1,0 +1,19 @@
+{
+  "name": "auth-app",
+  "version": "1.0.0",
+  "description": "auth app",
+  "scripts": {
+    "start:ui": "npm run --workspace=packages/client start",
+    "start:build": "npm run --workspace=packages/client build",
+    "server:build": "npm run --workspace=packages/server build",
+    "server:dev": "npm run --workspace=packages/server develop"
+  },
+  "author": "1kakadu1",
+  "license": "ISC",
+  "engines": {
+    "npm": "^8.4.1"
+  },
+  "workspaces": [
+    "./packages/*"
+  ]
+}

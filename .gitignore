@@ -1,0 +1,6 @@
+/node_modules
+/packages/server/test.db
+/packages/server/.env
+/packages/server/build
+/packages/client/build
+/packages/client/node_modules
