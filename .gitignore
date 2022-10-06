@@ -4,3 +4,4 @@
 /packages/server/build
 /packages/client/build
 /packages/client/node_modules
+/packages/server/node_modules

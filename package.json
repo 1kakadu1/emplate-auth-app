@@ -6,7 +6,12 @@
     "start:ui": "npm run --workspace=packages/client start",
     "start:build": "npm run --workspace=packages/client build",
     "server:build": "npm run --workspace=packages/server build",
-    "server:dev": "npm run --workspace=packages/server develop"
+    "server:dev": "npm run --workspace=packages/server develop",
+    "migrate:create": "npm run --workspace=packages/server migrate:create",
+    "migrate:up": "npm run --workspace=packages/server migrate:up",
+    "migrate:down": "npm run --workspace=packages/server migrate:down",
+    "format:fix": "npm run format:fix --workspace=packages/server && npm run format:fix --workspace=packages/client",
+    "format:check": "npm run format:check --workspace=packages/server && npm run format:check --workspace=packages/client"
   },
   "author": "1kakadu1",
   "license": "ISC",

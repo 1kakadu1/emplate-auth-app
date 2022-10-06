@@ -1,11 +1,17 @@
-import { Entity, IdentifiedReference, ManyToOne, Property, Reference, Unique } from '@mikro-orm/core';
+import {
+  Entity,
+  IdentifiedReference,
+  ManyToOne,
+  Property,
+  Reference,
+  Unique,
+} from "@mikro-orm/core";
 
-import { BaseEntity } from './BaseEntity';
-import { User } from './UserEntity';
+import { BaseEntity } from "./BaseEntity";
+import { User } from "./UserEntity";
 
 @Entity()
 export class Token extends BaseEntity {
-
   @Property()
   refreshToken: string;
 
@@ -17,5 +23,4 @@ export class Token extends BaseEntity {
     this.refreshToken = refreshToken;
     this.user = Reference.create(user);
   }
-
 }

@@ -9,6 +9,10 @@ userRouter.post("/registration", userController.registration);
 userRouter.post("/login", userController.login);
 userRouter.post("/logout", userController.logout);
 userRouter.post("/refresh", userController.refresh);
-userRouter.get("/user/:id", <any>authMiddleware ,userController.userProfileInfo);
+userRouter.get(
+  "/user/:id",
+  <any>authMiddleware,
+  userController.userProfileInfo
+);
 
 export const UserRouter = userRouter;

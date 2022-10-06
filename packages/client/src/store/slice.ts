@@ -1,5 +1,5 @@
-import { userSlice } from './reducer/user/user.reducer';
+import { userSlice } from "./reducer/user/user.reducer";
 
 export const slices = {
-	[userSlice.name]: userSlice.reducer,
+  [userSlice.name]: userSlice.reducer,
 };
