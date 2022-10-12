@@ -19,7 +19,7 @@ export default class AuthServices {
   static async login(
     email: string,
     password: string
-  ): Promise<AxiosResponse<IAuthResponse>> {
+  ): Promise<IAuthResponse> {
     try {
       const result = await api.post<IAuthResponse>("/login", {
         email,
@@ -30,34 +30,40 @@ export default class AuthServices {
         USER_KEY_LOCAL_STORE,
         JSON.stringify(result.data.data.user)
       );
-      return result;
+      return result.data;
     } catch (e: any) {
-      return e.response.data;
+      throw e.response.data;
     }
   }
 
   static async registation(
     email: string,
     password: string
-  ): Promise<AxiosResponse<IAuthResponse>> {
-    return api.post<IAuthResponse>("/registration", { email, password });
+  ): Promise<IAuthResponse> {
+    try {
+      return (await api.post<IAuthResponse>("/registration", { email, password })).data;
+    } catch(e: any){
+      throw e.response.data;
+    }
+   
   }
 
   static async logout(): Promise<AxiosResponse<{ data: string }>> {
     try {
-      return api.post("/logout");
+      return await api.post("/logout");
     } catch (e: any) {
       throw e.response.data.error;
     }
   }
 
-  static async verifyUser(): Promise<AxiosResponse<IAuthResponse>> {
+  static async verifyUser(): Promise<IAuthResponse> {
     try {
-      return axios.post<IAuthResponse>(
+      const result =  await axios.post<IAuthResponse>(
         `${API_URL}/refresh`,
         {},
         { withCredentials: true }
       );
+      return result.data;
     } catch (e: any) {
       throw e.response.data.error;
     }

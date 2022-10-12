@@ -13,8 +13,8 @@ export const fetchVerifyUser = createAsyncThunk(
   USER_KEY + "/fetchVerifyUser",
   async () => {
     const response = await AuthServices.verifyUser();
-    localStorage.setItem(TOKEN_KEY_LOCAL_STORE, response.data.data.accessToken);
-    return response.data.data.user;
+    localStorage.setItem(TOKEN_KEY_LOCAL_STORE, response.data.accessToken);
+    return response.data.user;
   }
 );
 
@@ -49,6 +49,13 @@ const setUser = (
   state.isLoading = false;
 };
 
+const     setUserError = (
+  state: IUserState,
+  { payload }: { payload: string} 
+)=>{
+  state.error = payload === "" ? undefined : payload;
+}
+
 export const userSlice = createSlice({
   name: USER_KEY,
   initialState: {
@@ -58,6 +65,7 @@ export const userSlice = createSlice({
   },
   reducers: {
     setUser,
+    setUserError,
   },
   extraReducers: {
     [fetchVerifyUser.fulfilled.type]: (
@@ -72,8 +80,9 @@ export const userSlice = createSlice({
       state.isLoading = true;
       state.error = "";
     },
-    [fetchVerifyUser.rejected.type]: (state: IUserState, { payload }) => {
-      state.error = payload;
+    [fetchVerifyUser.rejected.type]: (state: IUserState,  { error }: { error: { message: string } }) => {
+      state.error = error.message;
+      state.isLoading = false;
     },
     [fetchLogoutUser.fulfilled.type]: (state: IUserState) => {
       state.isAuth = false;
@@ -84,9 +93,9 @@ export const userSlice = createSlice({
     },
     [fetchLogoutUser.rejected.type]: (
       state: IUserState,
-      { payload }: { payload: string }
+      { error }: { error: { message: string } }
     ) => {
-      state.error = payload;
+      state.error = error.message;
     },
 
     [fetchUserByID.fulfilled.type]: (

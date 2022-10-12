@@ -1,5 +1,6 @@
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Alert, Box, Button, Container, Grid, Typography } from "@mui/material";
 import { Formik, FormikHelpers } from "formik";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RoutsPath } from "../../application/application.model";
 import { InputField } from "../../components/fields/input/input-field.component";
@@ -13,6 +14,7 @@ interface IRegistrationInit {
 }
 
 export const RegistrationPage = () => {
+  const [error, setError] = useState<string | undefined>(undefined)
   const initValue: IRegistrationInit = {
     email: "",
     password: "",
@@ -25,9 +27,10 @@ export const RegistrationPage = () => {
   ) => {
     AuthServices.registation(values.email, values.password)
       .then((r) => {
+        setError(undefined);
         navigate(RoutsPath.login);
       })
-      .catch((e) => console.log("registation error", e.response.data.error));
+      .catch((e) => setError(e.error));
   };
 
   return (
@@ -125,6 +128,10 @@ export const RegistrationPage = () => {
                   </Grid>
                 </Grid>
               </Grid>
+              <Box p={2} />
+              {
+                  error && <Grid item xs={12}><Alert severity="error">{error}</Alert></Grid>
+              }
             </Container>
           </form>
         )}
