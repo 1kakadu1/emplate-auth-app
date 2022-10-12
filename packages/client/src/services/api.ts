@@ -1,6 +1,7 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { TOKEN_KEY_LOCAL_STORE } from "../application/application.model";
 import { IAuthResponse } from "./AuthServices";
+import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 
 export const API_URL = "http://localhost:8001/api";
 
@@ -10,6 +11,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+  console.log("get", api);
   (config.headers as any).Authorization = `Bearer ${localStorage.getItem(
     TOKEN_KEY_LOCAL_STORE
   )}`;
@@ -49,5 +51,33 @@ api.interceptors.response.use(
     throw error;
   }
 );
+
+export const axiosBaseQuery =
+  (
+    { baseUrl }: { baseUrl: string } = { baseUrl: API_URL }
+  ): BaseQueryFn<
+    {
+      url: string
+      method: AxiosRequestConfig['method']
+      data?: AxiosRequestConfig['data']
+      params?: AxiosRequestConfig['params']
+    },
+    unknown,
+    unknown
+  > =>
+  async ({ url, method, data, params }) => {
+    try {
+      const result = await api({ url: baseUrl + url, method, data, params })
+      return { data: result.data }
+    } catch (axiosError) {
+      let err = axiosError as AxiosError
+      return {
+        error: {
+          status: err.response?.status,
+          data: err.response?.data || err.message,
+        },
+      }
+    }
+  }
 
 export default api;

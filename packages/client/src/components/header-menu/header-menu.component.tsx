@@ -10,7 +10,7 @@ import {
   MenuItem,
   Menu,
 } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   routersPrivate,
   routersPublic,
@@ -19,10 +19,12 @@ import { StyledToolbar, sxStylesHeaderMenu } from "./header-menu.styles";
 import { AccountCircle } from "@mui/icons-material";
 import { useAppDispatch } from "../../store/state";
 import { fetchLogoutUser } from "../../store/reducer/user/user.reducer";
+import { RoutsPath } from "../../application/application.model";
 
 export const HeaderMenuPrivate = () => {
   const location = useLocation();
-  const menuItems = routersPrivate.filter((item) => item.private === true);
+  const navigate = useNavigate();
+  const menuItems = routersPrivate.filter((item) => item.private === true && item.isMenu === true);
   const locationValue =
     menuItems.find((item) => location.pathname.includes(item.location))
       ?.location || "";
@@ -85,6 +87,14 @@ export const HeaderMenuPrivate = () => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
+              <MenuItem
+                onClick={() => {
+                  navigate(RoutsPath.profile);
+                  handleClose();
+                }}
+              >
+                Профиль
+              </MenuItem>
               <MenuItem
                 onClick={() => {
                   dispatch(fetchLogoutUser() as any);

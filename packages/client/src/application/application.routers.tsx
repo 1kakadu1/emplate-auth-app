@@ -2,6 +2,7 @@ import { HomePage } from "../pages/home/home.page";
 import { LoginPage } from "../pages/login/login.page";
 import { ProfilePage } from "../pages/profile/profile.page";
 import { RegistrationPage } from "../pages/registration/registration.page";
+import { UsersPage } from "../pages/users/users.page";
 import { IRouteItem, RoutsPath } from "./application.model";
 
 export const BASE_ROUTE = RoutsPath.login;
@@ -22,8 +23,25 @@ export const routersPrivate: IRouteItem[] = [
     element: <ProfilePage />,
     location: RoutsPath.profile,
     path: RoutsPath.profile,
+    isMenu: false,
+  },
+  {
+    name: "Users",
+    private: true,
+    element: <UsersPage />,
+    location: RoutsPath.users,
+    path: RoutsPath.users,
     isMenu: true,
   },
+  {
+    name: "User Item",
+    private: true,
+    element: <div />,
+    location: RoutsPath.user,
+    path: RoutsPath.user+":id",
+    isMenu: false,
+  },
+
 ];
 
 export const routersPublic: IRouteItem[] = [
@@ -44,7 +62,7 @@ export const routersPublic: IRouteItem[] = [
   {
     name: "404",
     private: false,
-    element: <div> 404 </div>,
+    element: <div> 404! Not found page </div>,
     location: RoutsPath.not_found,
     path: "*",
   },

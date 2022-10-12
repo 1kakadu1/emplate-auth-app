@@ -6,6 +6,8 @@ export enum RoutsPath {
   home = "/home",
   login = "/login",
   profile = "/profile",
+  users = "/users",
+  user = "/users/",
   registration = "/registration",
   not_found = "/404",
 }
