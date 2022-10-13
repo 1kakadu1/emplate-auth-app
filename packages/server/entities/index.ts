@@ -1,3 +1,3 @@
-export * from "./UserEntity";
-export * from "./BaseEntity";
-export * from "./TokenEntity";
+export * from './UserEntity';
+export * from './BaseEntity';
+export * from './TokenEntity';

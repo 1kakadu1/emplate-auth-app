@@ -1,4 +1,4 @@
 export interface IRequestData<T> {
-  data?: T;
-  error?: string;
+	data?: T;
+	error?: string;
 }

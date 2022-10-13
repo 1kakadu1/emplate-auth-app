@@ -1,18 +1,17 @@
-import { Router } from "express";
-import { UserController } from "../controllers/user";
-import { authMiddleware } from "../middlewares/auth.middlewares";
+import { Router } from 'express';
+import { UserController } from '../controllers/user';
+import { authMiddleware } from '../middlewares/auth.middlewares';
 
-const userRouter = Router();
+const usersRouter = Router();
 const userController = new UserController();
 
-userRouter.post("/registration", userController.registration);
-userRouter.post("/login", userController.login);
-userRouter.post("/logout", userController.logout);
-userRouter.post("/refresh", userController.refresh);
-userRouter.get(
-  "/user/:id",
-  <any>authMiddleware,
-  userController.userProfileInfo
-);
+//TODO: эти 4 маршрута должны быть например в authRouter
+usersRouter.post('/registration', userController.registration);
+usersRouter.post('/login', userController.login);
+usersRouter.post('/logout', userController.logout);
+usersRouter.post('/refresh', userController.refresh);
 
-export const UserRouter = userRouter;
+usersRouter.get('/users/:id', <any>authMiddleware, userController.user);
+usersRouter.get('/users', <any>authMiddleware, userController.users);
+
+export const UsersRouter = usersRouter;

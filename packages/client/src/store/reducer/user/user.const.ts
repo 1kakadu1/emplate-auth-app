@@ -1,1 +1,1 @@
-export const USER_KEY = "stateUser";
+export const USER_KEY = 'stateUser';

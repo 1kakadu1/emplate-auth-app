@@ -1,24 +1,24 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 export const sxInputField = {
-  formControl: {
-    marginBottom: "25px",
-    position: "relative",
-    width: "100%",
-  },
+	formControl: {
+		marginBottom: '25px',
+		position: 'relative',
+		width: '100%',
+	},
 
-  formControlInput: {},
+	formControlInput: {},
 
-  formControlLabel: {},
+	formControlLabel: {},
 };
 
-export const SpanErrorField = styled("span")({
-  color: "red",
-  textAlign: "right",
-  fontSize: "12px",
-  position: "absolute",
-  bottom: "-19px",
-  right: "0px",
-  fontFamily: "Lato",
-  fontWeight: 800,
+export const SpanErrorField = styled('span')({
+	color: 'red',
+	textAlign: 'right',
+	fontSize: '12px',
+	position: 'absolute',
+	bottom: '-19px',
+	right: '0px',
+	fontFamily: 'Lato',
+	fontWeight: 800,
 });
