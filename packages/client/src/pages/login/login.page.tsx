@@ -86,6 +86,9 @@ export const LoginPage = () => {
 												<Typography textAlign="center">Sing Up</Typography>
 											</Link>
 										</Button>
+										{/* <a href={RoutsPath.registration}>
+											Sing Up
+										</a> */}
 										<Button variant="contained" type="submit" disabled={isSubmitting}>
 											Send
 										</Button>
