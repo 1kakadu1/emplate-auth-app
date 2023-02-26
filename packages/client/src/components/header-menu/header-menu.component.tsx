@@ -25,7 +25,7 @@ export const HeaderMenuPrivate = () => {
 	};
 
 	return (
-		<AppBar position="static">
+		<AppBar position="static" data-testid="appbar-private">
 			<Container maxWidth="xl">
 				<StyledToolbar>
 					<Tabs value={locationValue} aria-label="menu tabs" sx={sxStylesHeaderMenu.tabs}>
@@ -95,9 +95,9 @@ export const HeaderMenuPrivate = () => {
 export const HeaderMenuPublic = () => {
 	const location = useLocation();
 	const title = routersPublic.find((route) => route.location === location.pathname)?.name || 'Mobile';
-
+	
 	return (
-		<AppBar position="static">
+		<AppBar position="static" data-testid="appbar-public">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
 					<Typography
@@ -112,6 +112,7 @@ export const HeaderMenuPublic = () => {
 							color: 'inherit',
 							textDecoration: 'none',
 						}}
+						data-testid="appbar-public-title"
 					>
 						{title}
 					</Typography>

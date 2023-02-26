@@ -5,3 +5,7 @@ export const slices = {
 	[apiUsers.reducerPath]: apiUsers.reducer,
 	[userSlice.name]: userSlice.reducer,
 };
+
+export const initState = {
+	[userSlice.name]: userSlice.getInitialState()
+}

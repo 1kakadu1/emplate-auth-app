@@ -3,7 +3,7 @@ import { TOKEN_KEY_LOCAL_STORE, USER_KEY_LOCAL_STORE } from '../../../applicatio
 import AuthServices from '../../../services/AuthServices';
 import UserServices from '../../../services/UserServices';
 import { IUser } from '../../../types';
-import { USER_KEY } from './user.const';
+import { initialStateUser, USER_KEY } from './user.const';
 import { IUserData, IUserState } from './user.model';
 
 export const fetchVerifyUser = createAsyncThunk(USER_KEY + '/fetchVerifyUser', async () => {
@@ -40,11 +40,7 @@ const setUserError = (state: IUserState, { payload }: { payload: string }) => {
 
 export const userSlice = createSlice({
 	name: USER_KEY,
-	initialState: {
-		isAuth: false,
-		user: undefined,
-		isLoading: false,
-	},
+	initialState: initialStateUser,
 	reducers: {
 		setUser,
 		setUserError,
