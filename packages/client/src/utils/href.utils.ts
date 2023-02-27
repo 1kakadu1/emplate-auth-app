@@ -15,7 +15,7 @@ export function updateURL(
 		currentSearch[queryKey] = queryValue;
 	}
 
-	const q = Object.keys(currentSearch || {})
+	const q = Object.keys(currentSearch)
 		.map(function (key) {
 			return key + '=' + currentSearch[key].toString();
 		})
