@@ -11,7 +11,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-	console.log('get', api);
+	//console.log('get', api);
 	(config.headers as any).Authorization = `Bearer ${localStorage.getItem(TOKEN_KEY_LOCAL_STORE)}`;
 	return config;
 });
@@ -24,7 +24,7 @@ api.interceptors.response.use(
 		const originalRequest = error.config;
 		if (error.response?.status === 401 && error.config && !error.config._isRetry) {
 			originalRequest._isRetry = true;
-			console.log('interceptors', originalRequest);
+			//console.log('interceptors', originalRequest);
 			try {
 				const response = await axios.post<IAuthResponse>(`${API_URL}/refresh`, {}, { withCredentials: true });
 				localStorage.setItem(TOKEN_KEY_LOCAL_STORE, response.data.data.accessToken);
@@ -52,19 +52,19 @@ export const axiosBaseQuery =
 		unknown,
 		unknown
 	> =>
-	async ({ url, method, data, params }) => {
-		try {
-			const result = await api({ url: baseUrl + url, method, data, params });
-			return { data: result.data };
-		} catch (axiosError) {
-			let err = axiosError as AxiosError;
-			return {
-				error: {
-					status: err.response?.status,
-					data: err.response?.data || err.message,
-				},
-			};
-		}
-	};
+		async ({ url, method, data, params }) => {
+			try {
+				const result = await api({ url: baseUrl + url, method, data, params });
+				return { data: result.data };
+			} catch (axiosError) {
+				let err = axiosError as AxiosError;
+				return {
+					error: {
+						status: err.response?.status,
+						data: err.response?.data || err.message,
+					},
+				};
+			}
+		};
 
 export default api;

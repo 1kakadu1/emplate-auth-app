@@ -83,7 +83,8 @@ export const HeaderMenuPrivate = () => {
 							<MenuItem
 								data-testid="menu-list-item-logout"
 								onClick={() => {
-									dispatch(fetchLogoutUser() as any);
+									dispatch(fetchLogoutUser());
+									navigate(RoutsPath.login);
 									handleClose();
 								}}
 							>

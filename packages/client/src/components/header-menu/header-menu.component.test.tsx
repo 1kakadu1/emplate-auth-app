@@ -5,8 +5,22 @@ import { renderWithProviders } from "../../tests/helpers/renderWithProviders";
 import { initState } from "../../store/slice";
 import { IUserState } from "../../store/reducer/user/user.model";
 import userEvent from "@testing-library/user-event";
+import { renderWithHistoryRouterApp, IRenderWithHistoryRouterApp } from "../../tests/helpers/renderWithHistoryRouter";
+import { fetchLogoutUser } from "../../store/reducer/user/user.reducer";
 const pathList = ["/registration", "/login", '/fail',];
-const pathPrivateList = ["/home", "/profile", '/404', "/login"]
+const pathPrivateList = ["/home", "/profile", '/404', "/login"];
+const routes: IRenderWithHistoryRouterApp[] = [
+  {
+    path: "/home",
+    element: <div><HeaderMenuPrivate /></div>,
+    replace: false
+  },
+  {
+    path: "/profile",
+    element: <div><HeaderMenuPrivate /></div>,
+    replace: false
+  },
+];
 
 const setup = (userState?: IUserState) => {
   const state = userState ? userState : {
@@ -29,6 +43,35 @@ const setup = (userState?: IUserState) => {
       }
     }
   )
+}
+
+const setupHistoryRoute = ({ userState, routes, initRoute = "/home" }: { userState?: IUserState, routes: IRenderWithHistoryRouterApp[], initRoute?: string }) => {
+  const state = userState ? userState : {
+    isAuth: true,
+    user: {
+      email: "test@test.ru",
+      name: "Test",
+      id: 666,
+    },
+    isLoading: false,
+  };
+
+  const { routerUI, history } = renderWithHistoryRouterApp({
+    initPath: initRoute,
+    routes: routes
+  });
+
+  return {
+    history,
+    render: () => renderWithProviders(routerUI,
+      {
+        preloadedState: {
+          ...initState,
+          stateUser: state
+        }
+      }
+    )
+  }
 }
 
 describe('AppBar memory router', () => {
@@ -92,22 +135,11 @@ describe('AppBar memory router', () => {
   });
 
   it('AppBar private menu logout', () => {
-    //setup();
+    setup();
     expect(1).toBe(1);
   });
 
   it('AppBar private menu go to profile', () => {
-    //setup();
-    const routes = [
-      {
-        path: "/home",
-        element: <div><HeaderMenuPrivate /></div>
-      },
-      {
-        path: "/profile",
-        element: <div><HeaderMenuPrivate /></div>
-      },
-    ];
     const router = createMemoryRouter(routes, {
       initialEntries: ["/home", "/profile"],
       initialIndex: 0,
@@ -151,10 +183,45 @@ describe('AppBar memory router', () => {
 
     expect(router.state.location.pathname).toEqual("/profile");
   });
+
+  it('Appbar user click logout', () => {
+    const { render, history } = setupHistoryRoute({
+      routes: routes,
+    });
+    const { store } = render();
+    console.log(store.getState().stateUser)
+    store.dispatch(fetchLogoutUser());
+    console.log(store.getState().stateUser)
+    expect(history.location.pathname).toEqual("/");
+
+  })
+
+  it('AppBar private menu go to profile (history route)', () => {
+    const { render, history } = setupHistoryRoute({
+      routes: routes,
+    });
+    render();
+
+    const menuBtn = screen.getByTestId("menu-btn");
+    const menuList = screen.getByTestId("menu-list");
+    expect(menuBtn).not.toBeNull();
+    expect(menuList).not.toBeNull();
+    userEvent.click(menuBtn);
+    expect(menuList?.getAttribute("aria-hidden")).toBeNull();
+
+    const menuItemProfie = screen.getByTestId("menu-list-item-profile");
+    expect(menuItemProfie).not.toBeNull();
+    expect(menuItemProfie.textContent).toEqual("Профиль");
+    userEvent.click(menuItemProfie);
+
+    const tabList = screen.getAllByTestId("tab");
+    expect(tabList.length).toBe(2);
+    expect(tabList[0].textContent).toEqual("Home");
+    expect(tabList[0].getAttribute("aria-selected")).toBe("true");
+    expect(tabList[1].getAttribute("aria-selected")).toBe("false");
+    expect(history.location.pathname).toEqual("/profile");
+  });
 });
-
-
-
 
 /*
 //TODO: test appbar mock
