@@ -7,6 +7,10 @@ import { IUserState } from "../../store/reducer/user/user.model";
 import userEvent from "@testing-library/user-event";
 import { renderWithHistoryRouterApp, IRenderWithHistoryRouterApp } from "../../tests/helpers/renderWithHistoryRouter";
 import { fetchLogoutUser } from "../../store/reducer/user/user.reducer";
+import MockAdapter from "axios-mock-adapter";
+import api from "../../services/api";
+
+const mock = new MockAdapter(api);
 const pathList = ["/registration", "/login", '/fail',];
 const pathPrivateList = ["/home", "/profile", '/404', "/login"];
 const routes: IRenderWithHistoryRouterApp[] = [
@@ -18,6 +22,11 @@ const routes: IRenderWithHistoryRouterApp[] = [
   {
     path: "/profile",
     element: <div><HeaderMenuPrivate /></div>,
+    replace: false
+  },
+  {
+    path: "/login",
+    element: <div><HeaderMenuPublic /></div>,
     replace: false
   },
 ];
@@ -45,7 +54,7 @@ const setup = (userState?: IUserState) => {
   )
 }
 
-const setupHistoryRoute = ({ userState, routes, initRoute = "/home" }: { userState?: IUserState, routes: IRenderWithHistoryRouterApp[], initRoute?: string }) => {
+const setupHistoryRoute = ({ userState, routes, initRoute = "/home", initIndex = 0 }: { userState?: IUserState, routes: IRenderWithHistoryRouterApp[], initRoute?: string, initIndex?: number }) => {
   const state = userState ? userState : {
     isAuth: true,
     user: {
@@ -57,6 +66,7 @@ const setupHistoryRoute = ({ userState, routes, initRoute = "/home" }: { userSta
   };
 
   const { routerUI, history } = renderWithHistoryRouterApp({
+    initIndex,
     initPath: initRoute,
     routes: routes
   });
@@ -184,15 +194,60 @@ describe('AppBar memory router', () => {
     expect(router.state.location.pathname).toEqual("/profile");
   });
 
-  it('Appbar user click logout', () => {
+  it('Appbar user dispatch logout sucsess', async () => {
     const { render, history } = setupHistoryRoute({
       routes: routes,
     });
     const { store } = render();
-    console.log(store.getState().stateUser)
-    store.dispatch(fetchLogoutUser());
-    console.log(store.getState().stateUser)
-    expect(history.location.pathname).toEqual("/");
+    mock.onPost("/logout").reply(200, { data: 'Выход пролшел успешно' }, {
+      Authorization: `Bearer token`
+    });
+    const logoutSpy = jest.spyOn(api, 'post');
+    await store.dispatch(fetchLogoutUser());
+    const state = store.getState().stateUser;
+    if (state.user === undefined && !state.isAuth) {
+      history.push("/login");
+    }
+    expect(state).toEqual({ isAuth: false, user: undefined, isLoading: false, error: '' });
+    expect(logoutSpy).toHaveBeenCalledTimes(1);
+    expect(history.location.pathname).toEqual("/login");
+
+  })
+
+  it('Appbar user dispath logout error', async () => {
+    const { render, history } = setupHistoryRoute({
+      routes: routes,
+    });
+    const { store } = render();
+    mock.onPost("/logout").reply(404, { error: 'Not found page' }, {
+      Authorization: `Bearer token`
+    });
+    const logoutSpy = jest.spyOn(api, 'post');
+    await store.dispatch(fetchLogoutUser());
+    const state = store.getState().stateUser;
+    expect(state.isAuth).toEqual(true);
+    expect(logoutSpy).toHaveBeenCalledTimes(1);
+    expect(history.location.pathname).toEqual("/home");
+
+  })
+
+  it('Appbar user click logout', async () => {
+    const { render, history } = setupHistoryRoute({
+      routes: routes,
+    });
+    const { store } = render();
+    mock.onPost("/logout").reply(200, { data: 'Выход пролшел успешно' }, {
+      Authorization: `Bearer token`
+    });
+    const logoutSpy = jest.spyOn(api, 'post');
+    const menuBtn = screen.getByTestId("menu-btn");
+    userEvent.click(menuBtn);
+    const itemLogout = screen.getByTestId("menu-list-item-logout");
+    userEvent.click(itemLogout);
+    const state = store.getState().stateUser;
+    expect(state.isAuth).toEqual(true);
+    expect(logoutSpy).toHaveBeenCalledTimes(1);
+    expect(history.location.pathname).toEqual("/login");
 
   })
 

@@ -35,10 +35,10 @@ export const HeaderMenuPrivate = () => {
 								sx={sxStylesHeaderMenu.tab}
 								label={item.name}
 								component={Link}
-								to={item.location || item.path}
-								key={item.location || item.path}
-								value={item.location || item.path}
-								id={'simple-tab-' + (item.location || item.path)}
+								to={item.location}
+								key={item.location}
+								value={item.location}
+								id={'simple-tab-' + (item.location)}
 							/>
 						))}
 					</Tabs>

@@ -11,7 +11,6 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-	//console.log('get', api);
 	(config.headers as any).Authorization = `Bearer ${localStorage.getItem(TOKEN_KEY_LOCAL_STORE)}`;
 	return config;
 });
@@ -24,17 +23,16 @@ api.interceptors.response.use(
 		const originalRequest = error.config;
 		if (error.response?.status === 401 && error.config && !error.config._isRetry) {
 			originalRequest._isRetry = true;
-			//console.log('interceptors', originalRequest);
 			try {
+
 				const response = await axios.post<IAuthResponse>(`${API_URL}/refresh`, {}, { withCredentials: true });
 				localStorage.setItem(TOKEN_KEY_LOCAL_STORE, response.data.data.accessToken);
 
 				return api.request(originalRequest);
 			} catch (e) {
-				console.log('NOT AUTH USER');
+				return "NOT AUTH USER";
 			}
 		}
-
 		throw error;
 	},
 );

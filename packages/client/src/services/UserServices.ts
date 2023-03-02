@@ -7,7 +7,7 @@ export default class UserServices {
 			const result = await api.get('/users/' + id);
 			return result.data.data.user;
 		} catch (e: any) {
-			throw e.response.data.error;
+			throw e.response?.data?.data?.error || e.message;
 		}
 	}
 }
