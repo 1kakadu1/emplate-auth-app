@@ -23,6 +23,7 @@ export const InputField = ({
 				{label}
 			</InputLabel>
 			<FilledInput
+				data-testid="input"
 				id={inputIdSlug + name}
 				name={name}
 				sx={{
@@ -37,7 +38,7 @@ export const InputField = ({
 				onFocus={handleFocus}
 			/>
 
-			<SpanErrorField>{errors && touched && errors}</SpanErrorField>
+			<SpanErrorField role={"error"}>{errors && touched && errors}</SpanErrorField>
 		</FormControl>
 	);
 };

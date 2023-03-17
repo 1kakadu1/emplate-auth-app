@@ -5,8 +5,9 @@ export function updateURL(
 	pathname: string,
 	queryKey: string | number,
 	queryValue: string | number,
+	location: Location
 ) {
-	const currentSearch = queryParse(window.location);
+	const currentSearch = queryParse(location);
 
 	if (queryKey in currentSearch && queryValue === '') {
 		delete currentSearch[queryKey];
@@ -14,7 +15,7 @@ export function updateURL(
 		currentSearch[queryKey] = queryValue;
 	}
 
-	const q = Object.keys(currentSearch || {})
+	const q = Object.keys(currentSearch)
 		.map(function (key) {
 			return key + '=' + currentSearch[key].toString();
 		})

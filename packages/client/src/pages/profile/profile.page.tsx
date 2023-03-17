@@ -16,7 +16,6 @@ export const ProfilePage = () => {
 			<Button
 				variant="contained"
 				onClick={() => {
-					console.log(user);
 					user && dispatch(fetchUserByID(user?.id.toString()) as any);
 				}}
 			>
