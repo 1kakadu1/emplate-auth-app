@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input field input snapshot 1`] = `
+<div>
+  <div
+    class="MuiFormControl-root css-1h9yf86-MuiFormControl-root"
+  >
+    <label
+      class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-filled MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-filled css-e4w4as-MuiFormLabel-root-MuiInputLabel-root"
+      data-shrink="false"
+      for="filled-adornment-email"
+    >
+      Email
+    </label>
+    <div
+      class="MuiInputBase-root MuiFilledInput-root MuiFilledInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-b2zlx-MuiInputBase-root-MuiFilledInput-root"
+      data-testid="input"
+    >
+      <input
+        aria-invalid="false"
+        class="MuiInputBase-input MuiFilledInput-input css-10botns-MuiInputBase-input-MuiFilledInput-input"
+        id="filled-adornment-email"
+        name="email"
+        type="text"
+        value=""
+      />
+    </div>
+    <span
+      class="css-11g9awg"
+      role="error"
+    />
+  </div>
+</div>
+`;

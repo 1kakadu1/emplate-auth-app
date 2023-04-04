@@ -1,16 +1,16 @@
 import { InputField } from "./input-field.component";
-import { render, screen} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { IFieldInput } from "./input-field.model";
 import userEvent from '@testing-library/user-event'
 
 const props: IFieldInput = {
-    label:"Email",
-    name:"email",
-    value:"",
+    label: "Email",
+    name: "email",
+    value: "",
     handleChange: jest.fn(),
     handleBlur: jest.fn(),
     handleFocus: jest.fn(),
-    errors:undefined,
+    errors: undefined,
     touched: undefined,
 }
 const spyHandleChange = jest.spyOn(props, "handleChange");
@@ -19,16 +19,16 @@ const spyHandleBlur = jest.spyOn(props, "handleBlur");
 
 describe('Input field', () => {
     it('init default', () => {
-        render(<InputField {...props}/>);
+        render(<InputField {...props} />);
         const input = screen.getByLabelText("Email");
         expect(input).toBeInTheDocument();
     });
 
     it('change props value', () => {
         const email = 'test@mail.ru';
-    
+
         const { rerender } = render(<InputField {...props} />);
-        
+
         expect(screen.getByTestId<HTMLInputElement>("input")).not.toBeNull();
         rerender(
             <InputField
@@ -41,6 +41,16 @@ describe('Input field', () => {
         expect(input).not.toBeNull();
         expect(input?.value).toEqual(email);
     });
+
+    it('input snapshot', () => {
+        const inputProps = { ...props };
+        //inputProps.label = "First name";
+        const { container } = render(<InputField {...inputProps} />);
+        expect(screen.getByTestId<HTMLInputElement>("input")).not.toBeNull();
+        expect(container).toMatchSnapshot();
+    });
+
+
 
     it('check error', () => {
         render(<InputField
@@ -61,7 +71,7 @@ describe('Input field', () => {
             {...props}
         />);
         const inputField = screen.getByTestId("input");
-        userEvent.type(inputField,"test");
+        userEvent.type(inputField, "test");
         expect(spyHandleChange).toHaveBeenCalledTimes(4);
         userEvent.tab();
         expect(spyHandleFocus).toHaveBeenCalledTimes(1);

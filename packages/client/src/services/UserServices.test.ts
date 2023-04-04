@@ -1,10 +1,20 @@
-import { AxiosError } from "axios";
+//import { AxiosError } from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { USER_MOCK } from "../tests/mocks/user.mock";
+//import { makeServer } from "../tests/server/server";
 import api from "./api";
 import UserServices from "./UserServices";
 
 describe('user services', () => {
+
+    // let server: any;
+    // beforeEach(() => {
+    //     server = makeServer({})
+    // })
+    // afterEach(() => {
+    //     server.shutdown()
+    // })
+
     let mockApi: MockAdapter;
     beforeAll(() => {
         mockApi = new MockAdapter(api);
@@ -39,4 +49,10 @@ describe('user services', () => {
         const result = await UserServices.getUserByID("-1");
         expect(result).toEqual(USER_MOCK);
     });
+
+    // it('request success 2', async () => {
+    //     mockApi.onGet(`/users/-1`).reply(200, { data: { user: USER_MOCK } });
+    //     const result = await UserServices.getUserByID("-1");
+    //     expect(result).toEqual(USER_MOCK);
+    // });
 })
