@@ -25,13 +25,11 @@ describe('user selector', () => {
 	it('user selecor toUserSelector error', () => {
 		const selector = userSelector({ ...initState, [USER_KEY]: { ...initState.stateUser, error: "not found 404" } });
 		const error = toUserSelector.error.resultFunc(selector);
-
 		expect(error).toBe("not found 404");
 	});
 
 	it('user selecor toUserSelector user', () => {
 		const selector = userSelector({ ...initState, [USER_KEY]: { ...initState.stateUser, user: USER_MOCK } });
-		console.log(selector)
 		const user = toUserSelector.user.resultFunc(selector);
 		expect(user).toEqual(USER_MOCK);
 	});
