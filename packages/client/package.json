@@ -35,6 +35,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:c": "npm run test -- --coverage --watchAll",
+    "test:u": "npm run test -- -u",
+    "test:all": "react-scripts test --watchAll",
     "eject": "react-scripts eject",
     "format:fix": "npx prettier --list-different --ignore-path=.gitignore \"**/*.ts(x)?\" --write",
     "format:check": "npx prettier --list-different --ignore-path=.gitignore \"**/*.ts(x)?\""
