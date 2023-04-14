@@ -5,3 +5,7 @@ export const USER_MOCK: IUser = {
     email: "user@test.test",
     name: "Test"
 }
+
+export const USERS_MOCK: IUser[] = [
+    USER_MOCK,
+];

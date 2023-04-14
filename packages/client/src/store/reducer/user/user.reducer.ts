@@ -12,9 +12,13 @@ export const fetchVerifyUser = createAsyncThunk(USER_KEY + '/fetchVerifyUser', a
 	return response.data.user;
 });
 
-export const fetchUserByID = createAsyncThunk(USER_KEY + '/fetchUserByID', async (id: string) => {
-	const response = await UserServices.getUserByID(id);
-	return response;
+export const fetchUserByID = createAsyncThunk(USER_KEY + '/fetchUserByID', async (id: string, thunkApi) => {
+	try {
+		const response = await UserServices.getUserByID(id);
+		return response;
+	} catch (e: any) {
+		return thunkApi.rejectWithValue(e)
+	}
 });
 
 export const fetchLogoutUser = createAsyncThunk(USER_KEY + '/fetchLogoutUser', async () => {
@@ -72,12 +76,16 @@ export const userSlice = createSlice({
 
 		[fetchUserByID.fulfilled.type]: (state: IUserState, { payload }: { payload: IUser }) => {
 			state.user = payload;
+			state.isLoading = false;
+			//state.isAuth = true
 		},
 		[fetchUserByID.pending.type]: (state: IUserState) => {
+			//state.isLoading = true;
 			state.error = '';
 		},
 		[fetchUserByID.rejected.type]: (state: IUserState, { error }: { error: { message: string } }) => {
 			state.error = error.message;
+			//state.isLoading = false
 		},
 	},
 });
