@@ -1,6 +1,6 @@
 import { IUser } from '../types';
 import api, { API_URL } from '../services/api';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { TOKEN_KEY_LOCAL_STORE, USER_KEY_LOCAL_STORE } from '../application/application.model';
 
 export interface IAuthResponse {
@@ -23,7 +23,8 @@ export default class AuthServices {
 			localStorage.setItem(USER_KEY_LOCAL_STORE, JSON.stringify(result.data.data.user));
 			return result.data;
 		} catch (e: any) {
-			throw e.response.data;
+			const err = (e as AxiosError<any, any>)
+			throw err?.response?.data?.data?.error || err.message;
 		}
 	}
 
@@ -31,7 +32,8 @@ export default class AuthServices {
 		try {
 			return (await api.post<IAuthResponse>('/registration', { email, password })).data;
 		} catch (e: any) {
-			throw e.response.data;
+			const err = (e as AxiosError<any, any>)
+			throw err?.response?.data?.data?.error || err.message;
 		}
 	}
 
@@ -39,7 +41,8 @@ export default class AuthServices {
 		try {
 			return await api.post('/logout');
 		} catch (e: any) {
-			throw e.response.data.error;
+			const err = (e as AxiosError<any, any>)
+			throw err?.response?.data?.data?.error || err.message;
 		}
 	}
 
@@ -48,7 +51,8 @@ export default class AuthServices {
 			const result = await axios.post<IAuthResponse>(`${API_URL}/refresh`, {}, { withCredentials: true });
 			return result.data;
 		} catch (e: any) {
-			throw e.response.data.error;
+			const err = (e as AxiosError<any, any>)
+			throw err?.response?.data?.data?.error || err.message;
 		}
 	}
 }
